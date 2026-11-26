@@ -1,0 +1,9 @@
+﻿id;nombre;fuente;logica;ventana;umbral;attack;falso_positivo;prueba_benigna;prueba_maliciosa;resultado
+D01;SQLi en el borde;Nginx/Apache;;;;T1190;;;;;
+D02;Dump o exfiltración;MariaDB + Nginx;;;;T1213, T1041;;;;;
+D03;Fuerza bruta de login;Apache;;;;T1110.001;;;;;
+D04;Captura de phishing;Phish/Apache;;;;T1566.002, T1078;;;;;
+D05;Slowloris;Nginx;;;;T1499.003;;;;;
+D06;Inundación HTTP;Nginx;;;;T1499.002;;;;;
+;;;;;;;
+;;;;;;;

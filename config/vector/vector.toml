@@ -1,0 +1,12 @@
+data_dir = "/var/lib/vector"
+
+[sources.lab]
+type = "file"
+include = ["/var/log/lab/nginx/*.log", "/var/log/lab/apache/*.log", "/var/log/lab/mysql/*.log", "/var/log/lab/phish/*.log"]
+read_from = "beginning"
+
+[sinks.consolidated]
+type = "file"
+inputs = ["lab"]
+path = "/var/log/lab/consolidated/%Y-%m-%d.jsonl"
+encoding.codec = "json"

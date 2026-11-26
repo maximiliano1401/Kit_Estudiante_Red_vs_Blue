@@ -1,0 +1,7 @@
+.env
+logs/
+loot/
+evidence/
+*.pcap
+*.sql
+*.dump

@@ -1,0 +1,153 @@
+name: redblue-lab
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  edge:
+    image: nginx:1.27-alpine
+    container_name: rb-edge
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8080:80"
+    volumes:
+      - ./config/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./logs/nginx:/var/log/nginx
+    networks: [dmz]
+    depends_on: [web]
+    mem_limit: 64m
+    cpus: 0.25
+    logging: *default-logging
+
+  web:
+    image: ghcr.io/digininja/dvwa:a1978a2
+    container_name: rb-web
+    restart: unless-stopped
+    environment:
+      DB_SERVER: db
+      DB_DATABASE: dvwa
+      DB_USER: dvwa
+      DB_PASSWORD: ${DB_PASSWORD:?definir en .env}
+      DEFAULT_SECURITY_LEVEL: low
+    volumes:
+      - ./logs/apache:/var/log/apache2
+      - ./config/apache/lab-logging.conf:/etc/apache2/conf-enabled/zz-lab-logging.conf:ro
+    networks: [dmz, internal]
+    depends_on:
+      db:
+        condition: service_healthy
+    mem_limit: 384m
+    cpus: 0.50
+    logging: *default-logging
+
+  db:
+    image: mariadb:10.11
+    container_name: rb-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?definir en .env}
+      MARIADB_DATABASE: dvwa
+      MARIADB_USER: dvwa
+      MARIADB_PASSWORD: ${DB_PASSWORD:?definir en .env}
+    command:
+      - --general-log=1
+      - --general-log-file=/var/log/mysql/general.log
+      - --slow-query-log=1
+      - --slow-query-log-file=/var/log/mysql/slow.log
+      - --long-query-time=1
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./logs/mysql:/var/log/mysql
+    networks: [internal]
+    mem_limit: 384m
+    cpus: 0.50
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    logging: *default-logging
+
+  logs:
+    image: timberio/vector:0.43.1-alpine
+    container_name: rb-logs
+    restart: unless-stopped
+    command: ["--config", "/etc/vector/vector.toml"]
+    volumes:
+      - ./logs:/var/log/lab
+      - ./config/vector/vector.toml:/etc/vector/vector.toml:ro
+    networks: [internal]
+    mem_limit: 128m
+    cpus: 0.25
+    logging: *default-logging
+
+  attacker:
+    build: ./attacker
+    container_name: rb-attacker
+    restart: unless-stopped
+    command: ["sleep", "infinity"]
+    volumes:
+      - ./loot:/loot
+      - ./evidence:/evidence
+    networks: [dmz, attack]
+    mem_limit: 768m
+    cpus: 1.0
+    logging: *default-logging
+
+  phish:
+    image: php:8.3-apache
+    container_name: rb-phish
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8081:80"
+    volumes:
+      - ./phish:/var/www/html:ro
+      - ./loot/phish:/var/www/html/captures
+      - ./logs/phish:/var/log/apache2
+      - ./config/apache/lab-logging.conf:/etc/apache2/conf-enabled/zz-lab-logging.conf:ro
+    networks: [attack]
+    mem_limit: 128m
+    cpus: 0.25
+    logging: *default-logging
+
+  mailpit:
+    image: axllent/mailpit:latest
+    container_name: rb-mailpit
+    profiles: ["mail"]
+    restart: unless-stopped
+    ports:
+      - "${BIND_ADDR:-127.0.0.1}:8025:8025"
+      - "${BIND_ADDR:-127.0.0.1}:1025:1025"
+    networks: [attack]
+    mem_limit: 64m
+    cpus: 0.25
+    logging: *default-logging
+
+  wazuh-agent:
+    image: wazuh/wazuh-agent:4.9.2
+    container_name: rb-wazuh-agent
+    profiles: ["wazuh"]
+    restart: unless-stopped
+    environment:
+      WAZUH_MANAGER: ${WAZUH_MANAGER:-wazuh.invalid}
+      WAZUH_AGENT_NAME: rb-web
+    volumes:
+      - ./logs/apache:/var/log/apache2:ro
+      - ./logs/nginx:/var/log/nginx:ro
+    networks: [dmz]
+    mem_limit: 128m
+    cpus: 0.25
+    logging: *default-logging
+
+networks:
+  dmz:
+  internal:
+    internal: true
+  attack:
+
+volumes:
+  db-data:

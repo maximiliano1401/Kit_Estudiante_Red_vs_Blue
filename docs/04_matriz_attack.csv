@@ -1,0 +1,13 @@
+﻿tactica;tecnica;id;fecha_utc;actor;evidence_id;regla;resultado;comentario
+Reconocimiento;Active Scanning: Vulnerability Scanning;T1595.002;;;;;;
+Acceso inicial;Exploit Public-Facing Application;T1190;;;;;;
+Ejecución;Command and Scripting Interpreter: Unix Shell;T1059.004;;;;;;
+Persistencia;Server Software Component: Web Shell;T1505.003;;;;;;
+Acceso a credenciales;Brute Force: Password Guessing;T1110.001;;;;;;
+Acceso a credenciales;Steal Web Session Cookie;T1539;;;;;;
+Recolección;Data from Information Repositories;T1213;;;;;;
+Exfiltración;Exfiltration Over C2 Channel;T1041;;;;;;
+Impacto;Service Exhaustion Flood;T1499.002;;;;;;
+Impacto;Application Exhaustion Flood;T1499.003;;;;;;
+;;;;;;;
+;;;;;;;
