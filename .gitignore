@@ -5,3 +5,5 @@ evidence/
 *.pcap
 *.sql
 *.dump
+.DS_Store
+**/.DS_Store
