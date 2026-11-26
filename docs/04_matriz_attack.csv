@@ -1,13 +1,13 @@
-﻿tactica;tecnica;id;fecha_utc;actor;evidence_id;regla;resultado;comentario
-Reconocimiento;Active Scanning: Vulnerability Scanning;T1595.002;;;;;;
-Acceso inicial;Exploit Public-Facing Application;T1190;;;;;;
-Ejecución;Command and Scripting Interpreter: Unix Shell;T1059.004;;;;;;
-Persistencia;Server Software Component: Web Shell;T1505.003;;;;;;
-Acceso a credenciales;Brute Force: Password Guessing;T1110.001;;;;;;
-Acceso a credenciales;Steal Web Session Cookie;T1539;;;;;;
-Recolección;Data from Information Repositories;T1213;;;;;;
-Exfiltración;Exfiltration Over C2 Channel;T1041;;;;;;
-Impacto;Service Exhaustion Flood;T1499.002;;;;;;
-Impacto;Application Exhaustion Flood;T1499.003;;;;;;
-;;;;;;;
-;;;;;;;
+tactica;tecnica;id;fecha_utc;actor;evidence_id;regla;resultado;comentario
+Reconocimiento;Active Scanning: Vulnerability Scanning;T1595.002;2026-11-25T15:13Z;Red (Mauricio);EV-A-20261125-005;-;parcial;nmap -sV al borde
+Reconocimiento;Active Scanning: Wordlist Scanning;T1595.003;2026-11-25T15:17Z;Red (Mauricio);EV-A-20261125-005;-;detectado;gobuster (técnica adicional)
+Acceso inicial;Exploit Public-Facing Application;T1190;2026-11-25T15:33Z;Red (Mauricio);EV-A-20261125-005;D01;detectado;Inyección SQL con sqlmap
+Recoleccion;Data from Information Repositories;T1213;2026-11-25T15:33Z;Red (Mauricio);EV-A-20261125-006;D02;detectado;Volcado de la tabla users
+Exfiltracion;Exfiltration Over C2 Channel;T1041;2026-11-25T15:34Z;Red (Mauricio);EV-A-20261125-006;D02;detectado;Dump exportado a users.csv
+Acceso a credenciales;Phishing: Spearphishing Link;T1566.002;2026-11-25T18:44Z;Red (Mauricio);EV-B-20261125-005;D04;detectado;Clon de login y correos cebo
+Acceso a credenciales;Input Capture: Web Portal Capture;T1056.003;2026-11-25T18:44Z;Red (Mauricio);EV-B-20261125-001;D04;detectado;capture.php (técnica adicional)
+Acceso con credenciales;Valid Accounts;T1078;2026-11-25T18:46Z;Red (Mauricio);EV-B-20261125-002;D04;detectado;Login con la credencial robada
+Acceso a credenciales;Steal Web Session Cookie;T1539;2026-11-25T18:46Z;Red (Mauricio);EV-B-20261125-002;-;parcial;Cookie de sesion reutilizable
+Impacto;Endpoint DoS: Service Exhaustion Flood;T1499.002;2026-11-25T19:05Z;Red (Mauricio);EV-C-20261125-003;D06;detectado;Inundacion HTTP con ab
+Impacto;Endpoint DoS: Application Exhaustion Flood;T1499.003;2026-11-25T19:10Z;Red (Mauricio);EV-C-20261125-001;D05;detectado;Slowloris con slowhttptest; el servicio resistio
+Defensa;Mitigacion limit_req en el borde;M1037;2026-11-25T19:14Z;Blue (Max);EV-C-20261125-002;D06;aplicado;Rate limiting 10 r/s burst 20: atacante 503, legitimo 200

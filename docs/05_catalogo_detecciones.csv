@@ -1,9 +1,7 @@
-﻿id;nombre;fuente;logica;ventana;umbral;attack;falso_positivo;prueba_benigna;prueba_maliciosa;resultado
-D01;SQLi en el borde;Nginx/Apache;;;;T1190;;;;;
-D02;Dump o exfiltración;MariaDB + Nginx;;;;T1213, T1041;;;;;
-D03;Fuerza bruta de login;Apache;;;;T1110.001;;;;;
-D04;Captura de phishing;Phish/Apache;;;;T1566.002, T1078;;;;;
-D05;Slowloris;Nginx;;;;T1499.003;;;;;
-D06;Inundación HTTP;Nginx;;;;T1499.002;;;;;
-;;;;;;;
-;;;;;;;
+id;nombre;fuente;logica;ventana;umbral;attack;falso_positivo;prueba_benigna;prueba_maliciosa;resultado
+D01;SQLi en el borde;Nginx/Apache;URI con union select, information_schema o sleep( y respuesta 200;1 min;1 o mas coincidencias;T1190;Formulario con la palabra select en texto;GET /vulnerabilities/sqli/?id=1 normal;GET con payload UNION SELECT user,password FROM users;detectado
+D02;Dump o exfiltracion;MariaDB + Nginx;Rafaga de union select o respuestas grandes sostenidas desde una IP;5 min;10 o mas peticiones;T1213, T1041;Lectura legitima de muchas filas;Consulta normal a la aplicacion;Volcado completo con sqlmap --dump;detectado
+D03;Fuerza bruta de login;Apache;POST a /login.php con fallo desde una misma IP;1 min;5 o mas fallos consecutivos;T1110.001;Usuario que olvida su contrasena;Un inicio de sesion correcto;20 intentos fallidos automatizados;parcial (regla preparada; no se ejecuto fuerza bruta)
+D04;Captura de phishing;Phish/Apache;POST a /capture.php o Referer del dominio del clon (puerto 8081);inmediata;1 o mas eventos;T1566.002, T1078;Ninguno: la ruta no existe en la app real;Navegacion normal en DVWA;Envio del formulario del login clonado;detectado
+D05;Slowloris;Nginx;Conexiones con cabeceras incompletas y request_time elevado sin completar;1 min;mas de 20 conexiones lentas;T1499.003;Cliente real con conexion muy lenta;Carga de pagina normal;slowhttptest -c 50 -H durante 60 s;detectado
+D06;Inundacion HTTP;Nginx;Tasa de peticiones por IP sobre el umbral o pico de respuestas 503;10 s;mas de 10 r/s por IP;T1499.002;Pico legitimo de trafico en hora punta;Navegacion normal de un usuario;ab -n 2000 -c 50 contra /login.php;detectado

