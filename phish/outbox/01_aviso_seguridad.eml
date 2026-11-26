@@ -1,0 +1,17 @@
+From: Soporte TI <soporte@lab.local>
+To: usuario <empleado@lab.local>
+Subject: [Accion requerida] Verifique su cuenta DVWA del laboratorio
+Date: Sat, 21 Nov 2026 02:56:00 +0000
+Content-Type: text/plain; charset=utf-8
+
+Estimado usuario:
+
+Detectamos un acceso inusual a su cuenta del portal interno. Por seguridad,
+confirme su identidad iniciando sesion en el siguiente enlace del laboratorio:
+
+  http://127.0.0.1:8081/
+
+Si no verifica en 24 horas, su cuenta sera suspendida.
+
+-- 
+Mesa de Servicio (SIMULACRO ACADEMICO - correo sintetico, no real)
